@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HCL GUVI DevOps Training Program - Kongu Engineering College</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #0066cc;
+            --secondary-color: #00b4d8;
+            --accent-color: #0096c7;
+            --dark-bg: #0a0e27;
+            --light-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #0066cc 0%, #00b4d8 100%);
+            --gradient-3: linear-gradient(135deg, #667eea 0%, #0066cc 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--light-bg);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Icon Styles - Using Unicode and CSS */
+        .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1em;
+            height: 1em;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 20px;
+            min-height: 90px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .logo-images {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-images img {
+            height: 70px;
+            width: auto;
+            max-width: 200px;
+            object-fit: contain;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        /* Featured Images Section */
+        .featured-images {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+        }
+
+        .image-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .image-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .image-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(0, 102, 204, 0.2);
+        }
+
+        .image-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(0, 102, 204, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+
+        .image-card:hover::before {
+            opacity: 1;
+        }
+
+        .image-wrapper {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .image-card:hover .image-wrapper img {
+            transform: scale(1.1);
+        }
+
+        .image-caption {
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .image-badge {
+            display: inline-block;
+            background: var(--gradient-2);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .image-caption h3 {
+            font-size: 1.6rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-dark);
+        }
+
+        .image-caption p {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') bottom center no-repeat;
+            background-size: cover;
+        }
+
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-badges {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            color: white;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .hero-image {
+            animation: fadeInRight 1s ease 0.4s both;
+        }
+
+        .hero-illustration {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+        }
+
+        /* About Section */
+        .about {
+            padding: 6rem 0;
+            background: white;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.8rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 102, 204, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 102, 204, 0.15);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* Curriculum Section */
+        .curriculum {
+            padding: 6rem 0;
+            background: var(--light-bg);
+        }
+
+        .curriculum-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .curriculum-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .curriculum-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-2);
+        }
+
+        .curriculum-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 102, 204, 0.15);
+        }
+
+        .curriculum-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(0, 102, 204, 0.1) 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+        }
+
+        .curriculum-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .curriculum-topics {
+            list-style: none;
+        }
+
+        .curriculum-topics li {
+            padding: 0.5rem 0;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .curriculum-topics li::before {
+            content: '✓';
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            padding: 6rem 0;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefits::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: var(--gradient-2);
+            opacity: 0.05;
+            border-radius: 50%;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .benefit-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 102, 204, 0.15);
+        }
+
+        .benefit-illustration {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1.5rem;
+            background: var(--gradient-2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .benefit-card p {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            padding: 6rem 0;
+            background: var(--light-bg);
+        }
+
+        .timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, var(--primary-color), transparent);
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .timeline-marker {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            box-shadow: 0 5px 20px rgba(0, 102, 204, 0.3);
+        }
+
+        .timeline-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .timeline-content h4 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .timeline-content p {
+            color: var(--text-light);
+        }
+
+        /* Trainers Section */
+        .trainers {
+            padding: 6rem 0;
+            background: white;
+        }
+
+        .trainers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+        }
+
+        .trainer-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .trainer-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 102, 204, 0.15);
+        }
+
+        .trainer-image {
+            width: 100%;
+            height: 350px;
+            background: var(--gradient-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .trainer-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            transition: transform 0.3s ease;
+        }
+
+        .trainer-card:hover .trainer-image img {
+            transform: scale(1.1);
+        }
+
+        /* Specific positioning for first trainer image */
+        .trainers-grid .trainer-card:first-child .trainer-image img {
+            object-position: center 80%;
+        }
+
+        .trainer-image-placeholder {
+            font-size: 6rem;
+            color: white;
+        }
+
+        .trainer-info {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .trainer-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .trainer-role {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .trainer-info p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: var(--light-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .social-links a:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Registration Section */
+        .registration {
+            padding: 6rem 0;
+            background: var(--light-bg);
+        }
+
+        .registration-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--gradient-2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 102, 204, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark-bg);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-logos {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Scroll Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .cta-buttons {
+                justify-content: center;
+            }
+
+            .hero-badges {
+                justify-content: center;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: row !important;
+                padding-left: 60px;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-marker {
+                left: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                flex-direction: column;
+                background: white;
+                width: 100%;
+                padding: 2rem;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+                transition: left 0.3s ease;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .image-showcase {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .registration-container {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-images">
+                    <img src="guvi.jpg" alt="GUVI Logo">
+                    <img src="kec.jpeg" alt="KEC Logo">
+                </div>
+                <span>Guvi Academy</span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#curriculum">Curriculum</a></li>
+                <li><a href="#benefits">Benefits</a></li>
+                <li><a href="#trainers">Trainers</a></li>
+                <li><a href="#register">Register</a></li>
+            </ul>
+            <div class="menu-toggle" id="menuToggle">☰</div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>HCL GUVI DevOps Training Program</h1>
+                <p class="subtitle">Empowering KEC Students with Industry Skills</p>
+                <div class="hero-badges">
+                    <span class="badge">👥 3rd Year Students</span>
+                    <span class="badge">⏰ 8 Weeks</span>
+                    <span class="badge">📜 Industry Certified</span>
+                </div>
+                <div class="cta-buttons">
+                    <a href="#register" class="btn btn-primary">Enroll Now</a>
+                    <a href="#about" class="btn btn-secondary">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <svg class="hero-illustration" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Laptop -->
+                    <rect x="120" y="180" width="260" height="160" rx="8" fill="#ffffff" stroke="#E2E8F0" stroke-width="3"/>
+                    <rect x="130" y="190" width="240" height="130" rx="4" fill="#667eea"/>
+                    <rect x="210" y="340" width="80" height="10" rx="5" fill="#E2E8F0"/>
+                    <rect x="100" y="350" width="300" height="5" rx="2" fill="#E2E8F0"/>
+
+                    <!-- Code lines -->
+                    <rect x="150" y="210" width="60" height="8" rx="4" fill="rgba(255,255,255,0.8)"/>
+                    <rect x="150" y="230" width="120" height="8" rx="4" fill="rgba(255,255,255,0.6)"/>
+                    <rect x="150" y="250" width="80" height="8" rx="4" fill="rgba(255,255,255,0.8)"/>
+                    <rect x="150" y="270" width="140" height="8" rx="4" fill="rgba(255,255,255,0.6)"/>
+                    <rect x="150" y="290" width="90" height="8" rx="4" fill="rgba(255,255,255,0.8)"/>
+
+                    <!-- Floating Icons -->
+                    <circle cx="80" cy="100" r="30" fill="#00D9FF" opacity="0.9"/>
+                    <path d="M70 100 L75 110 L90 95" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+                    <circle cx="420" cy="120" r="35" fill="#FF6B9D" opacity="0.9"/>
+                    <rect x="410" y="110" width="20" height="20" rx="2" fill="white"/>
+
+                    <circle cx="400" cy="280" r="28" fill="#FFA500" opacity="0.9"/>
+                    <path d="M390 275 L400 285 L410 270" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+                    <circle cx="70" cy="280" r="32" fill="#4CAF50" opacity="0.9"/>
+                    <rect x="60" y="270" width="20" height="20" rx="10" fill="white"/>
+
+                    <!-- Background circles -->
+                    <circle cx="250" cy="80" r="60" fill="rgba(255,255,255,0.1)"/>
+                    <circle cx="100" cy="200" r="40" fill="rgba(255,255,255,0.05)"/>
+                    <circle cx="400" cy="200" r="50" fill="rgba(255,255,255,0.05)"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Images Gallery Section -->
+    <section class="featured-images" id="gallery">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Program Gallery</div>
+                <h2>Experience DevOps Excellence</h2>
+                <p>Get a glimpse of our state-of-the-art training facilities and learning environment</p>
+            </div>
+            <div class="image-showcase">
+                <!-- Image Card 1 -->
+                <div class="image-card">
+                    <div class="image-wrapper">
+                        <img src="IMG_20260104_113322.jpg" alt="DevOps Training Lab" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'height:100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display:flex; align-items:center; justify-content:center; color:white; font-size:3rem;\'>💻</div>'">
+                    </div>
+                    <div class="image-caption">
+                        <span class="image-badge">Training Environment</span>
+                        <h3>HCL GUVI DevOps Training Session</h3>
+                        <p>State-of-the-art computer labs equipped with the latest hardware and software for hands-on DevOps training at Kongu Engineering College.</p>
+                    </div>
+                </div>
+
+                <!-- Image Card 2 -->
+                <div class="image-card">
+                    <div class="image-wrapper">
+                        <img src="IMG_20260104_113322.jpg" alt="Student Collaboration" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'height:100%; background: linear-gradient(135deg, #0066cc 0%, #00b4d8 100%); display:flex; align-items:center; justify-content:center; color:white; font-size:3rem;\'>👨‍💻</div>'">
+                    </div>
+                    <div class="image-caption">
+                        <span class="image-badge">Industry Training</span>
+                        <h3>Hands-On Learning Experience</h3>
+                        <p>Students working on real-world DevOps projects with industry mentors, fostering collaboration and technical skills essential for modern IT careers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">About the Program</div>
+                <h2>Transform Your Career with DevOps</h2>
+                <p>A comprehensive training program designed in partnership with HCL and GUVI to equip Kongu Engineering College students with cutting-edge DevOps skills and industry experience.</p>
+            </div>
+            <div class="about-content">
+                <p>This intensive 8-week program combines theoretical knowledge with hands-on practical sessions, real-world projects, and mentorship from industry experts. Students will gain proficiency in modern DevOps tools, cloud platforms, and automation techniques essential for today's tech industry.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💻</div>
+                    <h3>Hands-on Labs</h3>
+                    <p>Interactive practical sessions with real DevOps tools and scenarios to build your technical skills from day one.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Real Projects</h3>
+                    <p>Work on industry-standard projects that mirror actual enterprise environments and challenges.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👨‍🏫</div>
+                    <h3>Industry Mentors</h3>
+                    <p>Learn directly from experienced professionals currently working in leading tech companies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Curriculum Section -->
+    <section class="curriculum" id="curriculum">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Curriculum</div>
+                <h2>What You Will Learn</h2>
+                <p>Comprehensive coverage of essential DevOps tools and practices</p>
+            </div>
+            <div class="curriculum-grid">
+                <div class="curriculum-card">
+                    <div class="curriculum-icon">🐧</div>
+                    <h3>Linux Fundamentals</h3>
+                    <ul class="curriculum-topics">
+                        <li>Command Line Basics</li>
+                        <li>Shell Scripting</li>
+                        <li>System Administration</li>
+                        <li>Process Management</li>
+                    </ul>
+                </div>
+                <div class="curriculum-card">
+                    <div class="curriculum-icon">📦</div>
+                    <h3>Version Control - Git</h3>
+                    <ul class="curriculum-topics">
+                        <li>Git Basics & Workflow</li>
+                        <li>Branching Strategies</li>
+                        <li>Collaboration</li>
+                        <li>GitHub/GitLab</li>
+                    </ul>
+                </div>
+                <div class="curriculum-card">
+                    <div class="curriculum-icon">🐳</div>
+                    <h3>Docker Containers</h3>
+                    <ul class="curriculum-topics">
+                        <li>Containerization Concepts</li>
+                        <li>Docker Images & Containers</li>
+                        <li>Docker Compose</li>
+                        <li>Registry Management</li>
+                    </ul>
+                </div>
+                <div class="curriculum-card">
+                    <div class="curriculum-icon">☸️</div>
+                    <h3>Kubernetes</h3>
+                    <ul class="curriculum-topics">
+                        <li>Container Orchestration</li>
+                        <li>Pods & Deployments</li>
+                        <li>Services & Networking</li>
+                        <li>Scaling & Management</li>
+                    </ul>
+                </div>
+                <div class="curriculum-card">
+                    <div class="curriculum-icon">☁️</div>
+                    <h3>AWS Cloud</h3>
+                    <ul class="curriculum-topics">
+                        <li>EC2 & S3</li>
+                        <li>VPC & Networking</li>
+                        <li>IAM Security</li>
+                        <li>CloudFormation</li>
+                    </ul>
+                </div>
+                <div class="curriculum-card">
+                    <div class="curriculum-icon">🔄</div>
+                    <h3>CI/CD Pipeline</h3>
+                    <ul class="curriculum-topics">
+                        <li>Jenkins Automation</li>
+                        <li>Build & Test Pipelines</li>
+                        <li>Deployment Strategies</li>
+                        <li>GitOps Practices</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits" id="benefits">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Benefits</div>
+                <h2>Why Join This Program?</h2>
+                <p>Unlock your potential with exclusive opportunities</p>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-illustration">💼</div>
+                    <h3>Placement Support</h3>
+                    <p>Direct recruitment opportunities with HCL and partner companies. Career guidance, interview preparation, and job placement assistance.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-illustration">📜</div>
+                    <h3>Industry Certification</h3>
+                    <p>Earn recognized certifications from HCL and GUVI upon successful completion of the program, valued by top employers.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-illustration">👔</div>
+                    <h3>Internship Opportunities</h3>
+                    <p>Selected students get internship opportunities at HCL to gain real-world experience and work on live projects.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="timeline-section" id="timeline">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Schedule</div>
+                <h2>Program Timeline</h2>
+                <p>8-week structured learning path</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">1-2</div>
+                    <div class="timeline-content">
+                        <h3>Week 1-2</h3>
+                        <h4>Foundations</h4>
+                        <p>Linux fundamentals, command line, shell scripting, and Git version control basics.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">3-4</div>
+                    <div class="timeline-content">
+                        <h3>Week 3-4</h3>
+                        <h4>Containerization</h4>
+                        <p>Docker containers, images, Docker Compose, and introduction to container orchestration.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">5-6</div>
+                    <div class="timeline-content">
+                        <h3>Week 5-6</h3>
+                        <h4>Cloud & Orchestration</h4>
+                        <p>AWS cloud services, Kubernetes orchestration, deployment strategies, and scaling.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">7-8</div>
+                    <div class="timeline-content">
+                        <h3>Week 7-8</h3>
+                        <h4>CI/CD & Projects</h4>
+                        <p>Jenkins pipelines, automated testing, final project implementation, and presentations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trainers Section -->
+    <section class="trainers" id="trainers">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Our Mentors</div>
+                <h2>Learn from Industry Experts</h2>
+                <p>Experienced professionals from leading tech companies</p>
+            </div>
+            <div class="trainers-grid">
+                <div class="trainer-card">
+                    <div class="trainer-image">
+                        <img src="haris.jpg" alt="Haris" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'trainer-image-placeholder\'>👨‍💼</div>'">
+                    </div>
+                    <div class="trainer-info">
+                        <h3>Haris</h3>
+                        <div class="trainer-role">Senior DevOps Engineer - HCL</div>
+                        <p>12+ years in DevOps, Cloud Architecture, and automation. Specializes in Kubernetes and CI/CD.</p>
+                        <div class="social-links">
+                            <a href="#">in</a>
+                            <a href="#">git</a>
+                            <a href="#">tw</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="trainer-card">
+                    <div class="trainer-image">
+                        <img src="kala.jpg" alt="Kalanithi" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'trainer-image-placeholder\'>👩‍💼</div>'">
+                    </div>
+                    <div class="trainer-info">
+                        <h3>Kalanithi</h3>
+                        <div class="trainer-role">Cloud Solutions Architect - GUVI</div>
+                        <p>10+ years in AWS, Azure, and multi-cloud strategies. Expert in infrastructure automation.</p>
+                        <div class="social-links">
+                            <a href="#">in</a>
+                            <a href="#">git</a>
+                            <a href="#">tw</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="trainer-card">
+                    <div class="trainer-image">
+                        <img src="kali.jpg" alt="Kalithiresh" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'trainer-image-placeholder\'>👨‍💻</div>'">
+                    </div>
+                    <div class="trainer-info">
+                        <h3>Kalithiresh</h3>
+                        <div class="trainer-role">Lead SRE - Tech Giant</div>
+                        <p>15+ years in Site Reliability Engineering, monitoring, and system design at scale.</p>
+                        <div class="social-links">
+                            <a href="#">in</a>
+                            <a href="#">git</a>
+                            <a href="#">tw</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Section -->
+    <section class="registration" id="register">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Get Started</div>
+                <h2>Register Now</h2>
+                <p>Limited seats available for 3rd year students</p>
+            </div>
+            <div class="registration-container">
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="department">Department *</label>
+                            <select id="department" name="department" required>
+                                <option value="">Select Department</option>
+                                <option value="CSE">Computer Science</option>
+                                <option value="IT">Information Technology</option>
+                                <option value="ECE">Electronics & Communication</option>
+                                <option value="EEE">Electrical & Electronics</option>
+                                <option value="MECH">Mechanical</option>
+                                <option value="CIVIL">Civil</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="year">Year *</label>
+                            <select id="year" name="year" required>
+                                <option value="">Select Year</option>
+                                <option value="3">3rd Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required placeholder="your.email@kec.edu">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="+91 XXXXX XXXXX">
+                    </div>
+                    <div class="form-group">
+                        <label for="rollNumber">Roll Number *</label>
+                        <input type="text" id="rollNumber" name="rollNumber" required placeholder="Enter your roll number">
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Application</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About</h3>
+                    <div class="footer-logos">
+                        <div class="footer-logo">HCL</div>
+                        <div class="footer-logo">GUVI</div>
+                        <div class="footer-logo">KEC</div>
+                    </div>
+                    <p>A collaborative training initiative to bridge the gap between academic learning and industry requirements.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="#about">About Program</a>
+                    <a href="#curriculum">Curriculum</a>
+                    <a href="#benefits">Benefits</a>
+                    <a href="#register">Register</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>📍 Kongu Engineering College<br>Perundurai, Erode, Tamil Nadu</p>
+                    <p>✉️ info@kec.edu</p>
+                    <p>📞 +91 4294 226000</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#">f</a>
+                        <a href="#">t</a>
+                        <a href="#">in</a>
+                        <a href="#">ig</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 HCL GUVI DevOps Training Program. All rights reserved. | Powered by HCL & GUVI</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            menuToggle.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '☰';
+            });
+        });
+
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .curriculum-card, .benefit-card, .trainer-card, .timeline-item, .image-card').forEach(el => {
+            el.classList.add('fade-in');
+            observer.observe(el);
+        });
+
+        // Navbar Scroll Effect
+        let lastScroll = 0;
+        const navbar = document.querySelector('.navbar');
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+
+            if (currentScroll > 100) {
+                navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.15)';
+            } else {
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+            }
+
+            lastScroll = currentScroll;
+        });
+
+        // Form Submission
+        const registrationForm = document.getElementById('registrationForm');
+        registrationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                department: document.getElementById('department').value,
+                year: document.getElementById('year').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                rollNumber: document.getElementById('rollNumber').value
+            };
+
+            console.log('Form Data:', formData);
+            alert('Thank you for registering! We will contact you soon with further details.');
+            registrationForm.reset();
+        });
+
+        // Add Active State to Current Section in Nav
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const sections = document.querySelectorAll('section');
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
