@@ -1,167 +1,34 @@
-name: Deploy to Netlify with Security Checks
+name: Deploy to EC2
 
 on:
   push:
     branches:
       - main
-      - master
-  pull_request:
-    branches:
-      - main
-      - master
-  workflow_dispatch:
-
-env:
-  NODE_VERSION: '18'
 
 jobs:
-  # Security Checks Job
-  security-scan:
-    name: Security Checks
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Run Trivy security scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH,MEDIUM'
-
-      - name: Upload Trivy results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: 'trivy-results.sarif'
-
-      - name: Check for secrets in code
-        uses: trufflesecurity/trufflehog@main
-        with:
-          path: ./
-          base: ${{ github.event.repository.default_branch }}
-          head: HEAD
-
-      - name: HTML Validation
-        run: |
-          npm install -g html-validator-cli
-          html-validator --file=index.html --verbose || true
-
-      - name: Security headers check
-        run: |
-          echo "Checking HTML files for security best practices..."
-          if grep -r "X-Content-Type-Options\|Content-Security-Policy\|X-Frame-Options" . ; then
-            echo "✓ Security headers found in HTML"
-          else
-            echo "⚠ Consider adding security headers"
-          fi
-
-  # Build and Test Job
-  build-and-test:
-    name: Build and Test
-    runs-on: ubuntu-latest
-    needs: security-scan
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Check for broken links
-        run: |
-          npm install -g broken-link-checker
-          echo "Checking for broken links..."
-          # blc http://localhost:3000 --recursive --ordered || true
-
-      - name: Validate HTML structure
-        run: |
-          echo "Validating HTML files..."
-          find . -name "*.html" -type f | while read file; do
-            echo "Checking: $file"
-            if grep -q "<!DOCTYPE html>" "$file"; then
-              echo "✓ $file has DOCTYPE declaration"
-            else
-              echo "⚠ $file missing DOCTYPE declaration"
-            fi
-          done
-
-      - name: Check file permissions
-        run: |
-          echo "Checking file permissions..."
-          find . -type f -executable -not -path "./.git/*" -not -path "./node_modules/*"
-
-      - name: Build artifact
-        run: |
-          mkdir -p build
-          cp -r index.html DEVOPS_TRAINING KEC_Presentation,Documents,Code,Repositories build/ 2>/dev/null || cp index.html build/
-          ls -la build/
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: website-build
-          path: build/
-          retention-days: 7
-
-  # Deploy to Netlify
   deploy:
-    name: Deploy to Netlify
     runs-on: ubuntu-latest
-    needs: build-and-test
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
+      - name: Docker login
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build image
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/mysampleappv1:latest .
+
+      - name: Push image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/mysampleappv1:latest
+
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          name: website-build
-          path: build/
-
-      - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v3.0
-        with:
-          publish-dir: './build'
-          production-branch: main
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          deploy-message: "Deploy from GitHub Actions - ${{ github.event.head_commit.message }}"
-          enable-pull-request-comment: true
-          enable-commit-comment: true
-          overwrites-pull-request-comment: true
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        timeout-minutes: 10
-
-      - name: Deployment summary
-        run: |
-          echo "## Deployment Summary 🚀" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Successfully deployed to Netlify" >> $GITHUB_STEP_SUMMARY
-          echo "📅 Deployment Time: $(date)" >> $GITHUB_STEP_SUMMARY
-          echo "🔗 Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-
-  # Post-deployment verification
-  verify-deployment:
-    name: Verify Deployment
-    runs-on: ubuntu-latest
-    needs: deploy
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-    steps:
-      - name: Wait for deployment
-        run: sleep 30
-
-      - name: Health check
-        run: |
-          echo "Deployment verification completed"
-          echo "Please manually verify your Netlify site is accessible"
+          host: ${{ secrets.E C2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mysampleappv1:latest
+            docker rm -f myapp || true
+            docker run -d -p 80:80 --name myapp ${{ secrets.DOCKERHUB_USERNAME }}/mysampleappv1:latest
