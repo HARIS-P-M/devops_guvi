@@ -3,32 +3,38 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - master
+      - master   # or main (match your branch)
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
-      - name: Docker login
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+    - name: Login to DockerHub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/mysampleappv1:latest .
+    - name: Pull Docker Image
+      run: docker pull haris2006/mysampleappv1:latest
 
-      - name: Push image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/mysampleappv1:latest
-
-      - name: Deploy on EC2
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.E C2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mysampleappv1:latest
-            docker rm -f myapp || true
-            docker run -d -p 80:80 --name myapp ${{ secrets.DOCKERHUB_USERNAME }}/mysampleappv1:latest
+    - name: SSH and Deploy
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        port: 22
+        script: |
+          sudo docker stop myapp || true
+          sudo docker rm myapp || true
+          sudo docker pull haris2006/mysampleappv1:latest
+          sudo docker run -d \
+            -p 80:80 \
+            --restart always \
+            --name myapp \
+            haris2006/mysampleappv1:latest
