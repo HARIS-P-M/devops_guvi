@@ -18,5 +18,17 @@ spec:
         - name: myapp
           image: haris2006/mysampleappv1:latest
           ports:
-            - containerPort: 3000
+            - containerPort: 80
           imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
