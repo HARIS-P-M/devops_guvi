@@ -3,7 +3,7 @@ name: Full DevOps Pipeline
 on:
   push:
     branches:
-      - main
+      - master
 
 env:
   IMAGE_NAME: haris2006/mysampleappv1:latest
@@ -11,44 +11,15 @@ env:
   REGION: ${{ secrets.AWS_REGION }}
   NAMESPACE: myapp
   DEPLOYMENT_NAME: myapp
+  K8S_PATH: eks-terraform/k8s
 
 jobs:
 
 # ==========================================
-# STAGE 1 – TEST
-# ==========================================
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
-          cache-dependency-path: app/package-lock.json
-
-      - name: Install dependencies
-        run: |
-          cd app
-          npm ci
-
-      - name: Run tests
-        run: |
-          cd app
-          echo "No tests configured yet"
-          # npm test
-
-
-# ==========================================
-# STAGE 2 – BUILD & PUSH IMAGE
+# STAGE 1 – BUILD & PUSH IMAGE
 # ==========================================
   build:
     runs-on: ubuntu-latest
-    needs: test
 
     steps:
       - name: Checkout code
@@ -66,7 +37,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./app
+          context: .
+          file: ./Dockerfile
           push: true
           tags: |
             ${{ env.IMAGE_NAME }}:latest
@@ -76,7 +48,7 @@ jobs:
 
 
 # ==========================================
-# STAGE 3 – DEPLOY TO EKS (NO INFRA CHANGES)
+# STAGE 2 – DEPLOY TO EKS (NO INFRA CHANGES)
 # ==========================================
   deploy:
     runs-on: ubuntu-latest
@@ -131,22 +103,22 @@ jobs:
       - name: Create namespace
         run: |
           echo "Creating/verifying namespace: $NAMESPACE"
-          kubectl apply -f k8s/namespace.yaml
+          kubectl apply -f $K8S_PATH/namespace.yaml
           kubectl get namespace $NAMESPACE
 
       - name: Validate Kubernetes manifests
         run: |
           echo "Validating Kubernetes manifests..."
-          kubectl apply --dry-run=client -f k8s/deployment.yaml
-          kubectl apply --dry-run=client -f k8s/service.yaml
-          kubectl apply --dry-run=client -f k8s/ingress.yaml
+          kubectl apply --dry-run=client -f $K8S_PATH/deployment.yaml
+          kubectl apply --dry-run=client -f $K8S_PATH/service.yaml
+          kubectl apply --dry-run=client -f $K8S_PATH/ingress.yaml
           echo "✅ Manifests validation successful!"
 
       - name: Deploy application
         run: |
           echo "Deploying application to namespace: $NAMESPACE"
-          kubectl apply -f k8s/deployment.yaml -n $NAMESPACE
-          kubectl apply -f k8s/service.yaml -n $NAMESPACE
+          kubectl apply -f $K8S_PATH/deployment.yaml -n $NAMESPACE
+          kubectl apply -f $K8S_PATH/service.yaml -n $NAMESPACE
 
       - name: Wait for deployment to be ready
         run: |
@@ -180,7 +152,7 @@ jobs:
       - name: Deploy ingress
         run: |
           echo "Deploying ingress..."
-          kubectl apply -f k8s/ingress.yaml -n $NAMESPACE
+          kubectl apply -f $K8S_PATH/ingress.yaml -n $NAMESPACE
           sleep 10
 
       - name: Get deployment status
