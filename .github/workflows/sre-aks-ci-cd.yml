@@ -97,8 +97,26 @@ jobs:
           echo ""
           echo "Node status:"
           kubectl get nodes
+          
+          # Check if nodes exist
+          NODE_COUNT=$(kubectl get nodes --no-headers 2>/dev/null | wc -l)
+          if [ "$NODE_COUNT" -eq 0 ]; then
+            echo ""
+            echo "❌ ERROR: No worker nodes found in the cluster!"
+            echo ""
+            echo "Your EKS cluster exists but has no worker nodes to run pods."
+            echo ""
+            echo "Please provision the infrastructure using Terraform:"
+            echo "  cd eks-terraform"
+            echo "  terraform init"
+            echo "  terraform plan"
+            echo "  terraform apply"
+            echo ""
+            exit 1
+          fi
+          
           echo ""
-          echo "✅ Cluster connection successful!"
+          echo "✅ Cluster connection successful with $NODE_COUNT node(s)!"
 
       - name: Create namespace
         run: |
