@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  IMAGE_NAME: haris2006/mysampleappv1:latest
+  IMAGE_NAME: haris2006/mysampleappv1
   CLUSTER_NAME: chandru-eks
   REGION: ${{ secrets.AWS_REGION }}
   NAMESPACE: myapp
